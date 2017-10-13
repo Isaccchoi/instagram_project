@@ -26,6 +26,7 @@ MEDIA_URL = '/media/'
 # instagram_project/instagram/static
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 
+TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 
 with open(os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')) as f:
     config_secret_common_str = f.read()
@@ -75,7 +76,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATE_DIR,],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
