@@ -20,6 +20,12 @@ ROOT_DIR = os.path.dirname(BASE_DIR)
 # instagram_project/.config_secret/
 CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
 
+# instagram_project/instagram/media
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# instagram_project/instagram/static
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+
+
 with open(os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')) as f:
     config_secret_common_str = f.read()
 
