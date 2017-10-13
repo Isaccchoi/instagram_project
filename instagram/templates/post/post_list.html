@@ -10,7 +10,16 @@
 <body>
     <h1>Post List</h1>
     {% for post in posts %}
-        <img src="{{ post.photo.url }}" alt="" style="width: 300px; height: 300px;">
+        <div>
+            <img src="{{ post.photo.url }}" alt="" style="width: 300px; height: 300px;" />
+            <form action="" type="post">
+                <label for="">댓글
+                    <input name="comment" type="text">
+                </label>
+                <input type="submit" value="댓글 작성">
+            </form>
+            <br/>
+       </div>
     {% endfor %}
 </body>
 </html>

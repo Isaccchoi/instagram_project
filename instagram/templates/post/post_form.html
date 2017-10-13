@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Instagram</title>
+</head>
+<body>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label>Photo:
+            <input name="photo" type="file" value="이미지">
+        </label>
+        <input type="submit">
+    </form>
+</body>
+</html>
