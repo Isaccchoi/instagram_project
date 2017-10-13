@@ -3,7 +3,7 @@
 ## Requirements
  - Python 3.6.2
 
-## Secret config JSON FIle
+## Secret config JSON File
 
 ```.config_secret/seggins_common.json```
 
