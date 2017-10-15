@@ -11,16 +11,20 @@
 <a href="{% url 'post:post_list' %}" style="text-decoration: none; color: black"><h1>Post List</h1></a>
 {% for post in posts %}
     <div>
+        <!-- 이미지 -->
         <img src="{{ post.photo.url }}" alt="" style="width: 300px; height: 300px;"/>
+        <!-- 사진 삭제 -->
         <form action="{% url 'post:post_delete' post_pk=post.pk %}" method="post">
             {% csrf_token %}
             <input type="submit" value="사진 삭제">
         </form>
         <br/>
+        <!-- 댓글 출력 -->
         {% if post.postcomment_set.count %}
             <ul>
                 {% for comment in post.postcomment_set.all %}
                     <li>{{ comment.content }} -
+                        <!-- 댓글 삭제 -->
                         <form action="{% url 'post:comment_delete' comment_pk=comment.pk %}" method="post"
                               style="display: inline-block;">
                             {% csrf_token %}
@@ -31,6 +35,7 @@
                 {% endfor %}
             </ul>
         {% endif %}
+        <!-- 코멘트 작성 폼 -->
         <form action="{% url 'post:comment_create' post_pk=post.pk %}" method="post">
             {% csrf_token %}
             <label for="">댓글
@@ -38,6 +43,7 @@
             </label>
             <input type="submit" value="댓글 작성">
         </form>
+
         <br/>
     </div>
 {% endfor %}

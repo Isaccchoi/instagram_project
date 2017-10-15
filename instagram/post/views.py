@@ -32,8 +32,6 @@ def comment_add(request, post_pk):
     if request.method == "POST":
         post = Post.objects.get(pk=post_pk)
         PostComment.objects.create(post=post, content=request.POST.get("content"))
-        print("------------------------------------------")
-        return redirect("post:post_list")
     return redirect("post:post_list")
 
 
