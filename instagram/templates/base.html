@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
 </head>
 <body>
-<h1 class="text-center">Instagram</h1>
+<a href="{% url 'post:post_list' %}" style="text-decoration: none; color: black;"><h1 class="text-center">Instagram</h1></a>
 <hr/>
 {% block content %}
 {% endblock %}

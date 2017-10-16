@@ -14,5 +14,8 @@ class PostComment(models.Model):
     content = models.TextField()
     created_date = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ["created_date", ]
+
     def __str__(self):
         return f"{self.post.pk} - {self.content}"

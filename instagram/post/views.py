@@ -9,7 +9,7 @@ def post_list(request):
     posts = Post.objects.all()
     context = {
         "posts": posts,
-        "form": PostCommentForm,
+        "comment_form": PostCommentForm,
     }
     return render(request, 'post/post_list.html', context)
 
@@ -36,10 +36,10 @@ def post_create(request):
 
 def post_detail(request, post_pk):
     post = get_object_or_404(Post, pk=post_pk)
-    form = PostCommentForm
+    comment_form = PostCommentForm
     context = {
         'post': post,
-        'form': form,
+        'comment_form': comment_form,
     }
     return render(request, 'post/post_detail.html', context)
 
@@ -57,6 +57,9 @@ def comment_create(request, post_pk):
         form = PostCommentForm(request.POST)
         if form.is_valid():
             PostComment.objects.create(post=post, content=form.cleaned_data["content"])
+            next = request.GET.get('next')
+            if next:
+                return redirect(next)
         return redirect("post:post_detail", post_pk=post.pk)
     return redirect("post:post_list")
 
