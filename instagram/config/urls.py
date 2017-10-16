@@ -18,11 +18,13 @@ from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.contrib import admin
 
+from member import views as member_views
 from post import urls as post_urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'post/', include(post_urls, namespace='post')),
+    url(r'^post/', include(post_urls, namespace='post')),
+    url(r'^signup/$', member_views.signup, name='signup'),
 ]
 
 urlpatterns += static(

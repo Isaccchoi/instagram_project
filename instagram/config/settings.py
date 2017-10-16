@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'django_extensions',
     # custom
     'post',
+    'member',
 ]
 
 MIDDLEWARE = [
