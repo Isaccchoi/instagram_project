@@ -12,4 +12,10 @@ class PostForm(forms.Form):
 
 
 class PostCommentForm(forms.Form):
-    content = forms.CharField()
+    content = forms.CharField(
+        widget=forms.Textarea(
+            attrs={
+                'class': 'form-control',
+            }
+        ),
+    )

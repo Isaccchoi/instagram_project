@@ -36,8 +36,10 @@ def post_create(request):
 
 def post_detail(request, post_pk):
     post = get_object_or_404(Post, pk=post_pk)
+    form = PostCommentForm
     context = {
-        'post': post
+        'post': post,
+        'form': form,
     }
     return render(request, 'post/post_detail.html', context)
 

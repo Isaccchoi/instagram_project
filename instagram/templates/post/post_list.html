@@ -19,7 +19,7 @@
                 <!-- 댓글 출력 -->
                 {% if post.postcomment_set.count %}
                     <ul>
-                        {% for comment in post.postcomment_set.all %}
+                        {% for comment in post.comments.all %}
                             <li>{{ comment.content }} -
                                 <!-- 댓글 삭제 -->
                                 <form action="{% url 'post:comment_delete' comment_pk=comment.pk %}" method="post"
@@ -32,13 +32,6 @@
                         {% endfor %}
                     </ul>
                 {% endif %}
-                <!-- 코멘트 작성 폼 -->
-                <form action="{% url 'post:comment_create' post_pk=post.pk %}" method="post">
-                    {% csrf_token %}
-                    {{ form }}
-                    <button>댓글 작성</button>
-                </form>
-                <br/>
             </div>
             <hr/>
         {% endfor %}

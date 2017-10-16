@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <div>
+        <form action="{% url 'post:comment_create' post_pk=post_pk %}" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <button>댓글 작성</button>
+        </form>
+    </div>
+{% endblock %}

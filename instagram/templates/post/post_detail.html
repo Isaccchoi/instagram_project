@@ -2,19 +2,25 @@
 
 {% block content %}
     <div class="container">
-    {% if post.photo %}
-        <img src="{{ post.photo.url }}" alt=""/>
-    {% else %}
-        <h3>이미지 파일이 없습니다</h3>
-    {% endif %}
+        {% if post.photo %}
+            <img src="{{ post.photo.url }}" alt=""/>
+        {% else %}
+            <h3>이미지 파일이 없습니다</h3>
+        {% endif %}
 
-    {% if post.postcomment_set %}
-        <ul>
-        {% for comment in post.postcomment_set.all %}
-            <li>{{ comment.content }}</li>
-        {% endfor %}
-        </ul>
-    {% endif %}
-
+        {% if post.comments %}
+            <ul>
+                {% for comment in post.comments.all %}
+                    <li>{{ comment.content }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <!-- 코멘트 작성 폼 -->
+        <form action="{% url 'post:comment_create' post_pk=post.pk %}" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <button class="btn btn-primary btn-block">댓글 작성</button>
+        </form>
+        <br/>
     </div>
 {% endblock %}
