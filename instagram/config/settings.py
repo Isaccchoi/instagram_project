@@ -25,8 +25,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 # instagram_project/instagram/static
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
-
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
+STATICFILES_DIRS = [
+    STATIC_DIR,
+]
 
 with open(os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')) as f:
     config_secret_common_str = f.read()

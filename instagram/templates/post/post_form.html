@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>Instagram</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block content %}
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="사진 올리기">
+        {{ form.as_p }}
+        <button>글을 쓰자</button>
     </form>
-</body>
-</html>
+{% endblock %}
