@@ -1,14 +1,15 @@
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
-from .forms import PostForm
+from .forms import PostForm, PostCommentForm
 from .models import Post, PostComment
 
 
 def post_list(request):
     posts = Post.objects.all()
     context = {
-        "posts": posts
+        "posts": posts,
+        "form": PostCommentForm,
     }
     return render(request, 'post/post_list.html', context)
 
@@ -34,7 +35,7 @@ def post_create(request):
 
 
 def post_detail(request, post_pk):
-    post = Post.objects.get(pk=post_pk)
+    post = get_object_or_404(Post, pk=post_pk)
     context = {
         'post': post
     }
@@ -48,18 +49,20 @@ def post_delete(request, post_pk):
     return redirect("post:post_list")
 
 
-def comment_add(request, post_pk):
+def comment_create(request, post_pk):
     if request.method == "POST":
-        post = Post.objects.get(pk=post_pk)
-        PostComment.objects.create(post=post, content=request.POST.get("content"))
+        post = get_object_or_404(Post, pk=post_pk)
+        form = PostCommentForm(request.POST)
+        if form.is_valid():
+            PostComment.objects.create(post=post, content=form.cleaned_data["content"])
+        return redirect("post:post_detail", post_pk=post.pk)
     return redirect("post:post_list")
 
 
 def comment_delete(request, comment_pk):
     if request.method == "POST":
-        try:
-            comment = PostComment.objects.get(pk=comment_pk)
-        except PostComment.DoesNotExist:
-            return redirect("post:post_list")
+        comment = get_object_or_404(PostComment, pk=comment_pk)
+        post = get_object_or_404(Post, pk=comment.post_id)
         comment.delete()
+        return redirect("post:post_detail", post_pk=post.pk)
     return redirect("post:post_list")

@@ -9,3 +9,7 @@ class PostForm(forms.Form):
         data = self.cleaned_data['text']
         if data != data.upper():
             raise forms.ValidationError('All text must uppercase!')
+
+
+class PostCommentForm(forms.Form):
+    content = forms.CharField()

@@ -1,5 +1,20 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <img src="{{ post.photo.url }}" alt=""/>
+    <div class="container">
+    {% if post.photo %}
+        <img src="{{ post.photo.url }}" alt=""/>
+    {% else %}
+        <h3>이미지 파일이 없습니다</h3>
+    {% endif %}
+
+    {% if post.postcomment_set %}
+        <ul>
+        {% for comment in post.postcomment_set.all %}
+            <li>{{ comment.content }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+
+    </div>
 {% endblock %}
