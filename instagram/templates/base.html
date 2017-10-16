@@ -10,7 +10,18 @@
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
 </head>
 <body>
-<a href="{% url 'post:post_list' %}" style="text-decoration: none; color: black;"><h1 class="text-center">Instagram</h1></a>
+<a href="{% url 'post:post_list' %}" style="text-decoration: none; color: black;"><h1 class="text-center">Instagram</h1>
+</a>
+<p class="text-right" style="margin-right: 100px;">
+<span>
+    {% if request.user.is_authenticated %}
+        <a href="{% url 'member:logout' %}" class="btn btn-warning">로그아웃</a>
+    {% else %}
+        <a href="{% url 'member:login' %}" class="btn btn-primary">로그인</a>
+        <a href="{% url 'member:signup' %}" class="btn btn-primary">회원 가입</a>
+    {% endif %}
+</span>
+</p>
 <hr/>
 {% block content %}
 {% endblock %}
