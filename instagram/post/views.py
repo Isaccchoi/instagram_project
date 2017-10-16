@@ -1,6 +1,9 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from .models import Post, PostComment
+
+from .forms import PostForm
 
 
 def post_list(request):
@@ -11,12 +14,16 @@ def post_list(request):
     return render(request, 'post/post_list.html', context)
 
 
-def post_add(request):
-    if request.method == "POST":
-        Post.objects.create(photo=request.FILES['photo'])
-        return redirect("post:post_list")
-
+def post_create(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = Post.objects.create(photo=form.cleaned_data['photo'])
+            return HttpResponse(f'<img src="{post.photo.url}">')
+        else:
+            return HttpResponse('Form invalid!!!')
     context = {
+        "form": PostForm,
     }
     return render(request, 'post/post_form.html', context)
 
