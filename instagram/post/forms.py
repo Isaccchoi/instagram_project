@@ -13,7 +13,7 @@ class PostForm(forms.Form):
 
 class PostCommentForm(forms.Form):
     content = forms.CharField(
-        widget=forms.Textarea(
+        widget=forms.TextInput(
             attrs={
                 'class': 'form-control',
             }

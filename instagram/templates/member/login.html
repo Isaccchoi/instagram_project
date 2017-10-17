@@ -1,12 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="container">
-    <h1>로그인</h1>
-        <form action="" method="post">
-            {% csrf_token %}
-            {{ form }}
-            <button class="btn btn-primary btn-block">로그인</button>
-        </form>
+    <div class="login-container">
+        {% include 'include/form-horizontal.html' with form=form submit_text='로그인' %}
     </div>
 {% endblock %}

@@ -15,7 +15,7 @@ def signup(request):
     else:
         form = UserForm
     context = {
-        'user_form': form,
+        'form': form,
     }
     return render(request, 'member/signup.html', context)
 
