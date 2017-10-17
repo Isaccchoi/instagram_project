@@ -39,15 +39,19 @@ class UserForm(forms.Form):
     def clean_password2(self):
         password = self.cleaned_data['password']
         password2 = self.cleaned_data['password2']
-        if not password == password2:
+        if password != password2:
             raise forms.ValidationError('비밀번호가 같지 않습니다.')
-        else:
-            setattr(self, 'signup', self._signup)
         return password2
 
+    def clean(self):
+        # clean은 is_valid하건 is_valid하지 않건 무조건 실행
+        if self.is_valid():
+            setattr(self, 'signup', self._signup)
+        return self.cleaned_data
+
     def _signup(self, request):
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        username = self.cleaned_data['username']
+        password = self.cleaned_data['password']
         user = User.objects.create_user(username=username, password=password)
         if user is not None:
             login(request, user)
