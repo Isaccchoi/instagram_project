@@ -5,12 +5,7 @@
     <h1>로그인</h1>
         <form action="" method="post">
             {% csrf_token %}
-            <label>계정이름
-                <input name="username" type="text">
-            </label>
-            <label>비밀번호
-                <input name="password" type="password">
-            </label>
+            {{ form }}
             <button class="btn btn-primary btn-block">로그인</button>
         </form>
     </div>
