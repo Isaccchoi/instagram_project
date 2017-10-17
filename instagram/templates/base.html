@@ -15,6 +15,7 @@
 <p class="text-right" style="margin-right: 100px;">
 <span>
     {% if request.user.is_authenticated %}
+        <span style="color: gray">계정: </span>{{ request.user.username }}
         <a href="{% url 'member:logout' %}" class="btn btn-warning">로그아웃</a>
     {% else %}
         <a href="{% url 'member:login' %}" class="btn btn-primary">로그인</a>
