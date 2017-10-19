@@ -26,6 +26,9 @@
                 {% endif %}
             </p>
             <hr/>
+            <p class="text-right">
+                <a href="{% url 'post:post_create' %}" class="btn btn-sm btn-primary">글작성</a>
+            </p>
             {% block content %}
             {% endblock %}
         </div>

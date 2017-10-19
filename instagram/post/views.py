@@ -21,7 +21,7 @@ def post_create(request):
         # form이 valid한지 검사
         if form.is_valid():
             post = Post.objects.create(photo=form.cleaned_data['photo'])
-            return HttpResponse(f'<img src="{post.photo.url}">')
+            return redirect('post:post_detail', post_pk=post.pk)
     else:
         # GET요청의 경우 PostForm인스턴스를 생성해서 템플릿에 전달
         form = PostForm
