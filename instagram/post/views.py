@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
 from .forms import PostForm, PostCommentForm
@@ -14,9 +15,10 @@ def post_list(request):
     return render(request, 'post/post_list.html', context)
 
 
+@login_required(login_url='member:login')
 def post_create(request):
-    if not request.user.is_authenticated:
-        return redirect('member:login')
+    # if not request.user.is_authenticated:
+    #     return redirect('member:login')
     if request.method == 'POST':
         # POST요청의 경우 PostForm인스턴스 생성과정에서 request.POST, request.FILES를 사용
         form = PostForm(request.POST, request.FILES)
@@ -57,12 +59,19 @@ def post_delete(request, post_pk):
     return redirect("post:post_list")
 
 
+@login_required(login_url='member:login')
 def comment_create(request, post_pk):
+    # if not request.user.is_authenticated:
+    #     return redirect('member:login')
     if request.method == "POST":
         post = get_object_or_404(Post, pk=post_pk)
         form = PostCommentForm(request.POST)
         if form.is_valid():
-            PostComment.objects.create(post=post, content=form.cleaned_data["content"])
+            PostComment.objects.create(
+                post=post,
+                content=form.cleaned_data["content"],
+                author=request.user,
+            )
             page_next = request.GET.get('next')
             if page_next:
                 return redirect(page_next)
