@@ -52,9 +52,12 @@ def post_detail(request, post_pk):
     return render(request, 'post/post_detail.html', context)
 
 
+@login_required(login_url='member:login')
 def post_delete(request, post_pk):
+    post = Post.objects.get(pk=post_pk)
+    if post.author_id != request.user:
+        return redirect('post:post_list')
     if request.method == "POST":
-        post = Post.objects.get(pk=post_pk)
         post.delete()
     return redirect("post:post_list")
 
@@ -79,10 +82,13 @@ def comment_create(request, post_pk):
     return redirect("post:post_list")
 
 
+@login_required(login_url='member:login')
 def comment_delete(request, comment_pk):
+    comment = get_object_or_404(PostComment, pk=comment_pk)
+    post = get_object_or_404(Post, pk=comment.post_id)
+    if post.author_id != request.user.id:
+        return redirect('post:post_list')
     if request.method == "POST":
-        comment = get_object_or_404(PostComment, pk=comment_pk)
-        post = get_object_or_404(Post, pk=comment.post_id)
         comment.delete()
         return redirect("post:post_detail", post_pk=post.pk)
     return redirect("post:post_list")

@@ -1,33 +1,5 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% if post.photo %}
-        <img src="{{ post.photo.url }}" alt="" class="img-responsive" />
-    {% else %}
-        <h3>이미지 파일이 없습니다</h3>
-    {% endif %}
-
-    {% if post.comments %}
-        <ul>
-            <!-- 댓글 출력 -->
-            {% for comment in post.comments.all %}
-                <li>{{ comment.content }} -
-                    <!-- 댓글 삭제 -->
-                    <form action="{% url 'post:comment_delete' comment_pk=comment.pk %}" method="post"
-                          style="display: inline-block;">
-                        {% csrf_token %}
-                        <button class="btn btn-warning btn-sm">댓글 삭제</button>
-                    </form>
-                </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-    <!-- 코멘트 작성 폼 -->
-    <form action="{% url 'post:comment_create' post_pk=post.pk %}?next={% url 'post:post_detail' post_pk=post.pk %}"
-          method="post">
-        {% csrf_token %}
-        {{ comment_form }}
-        <button class="btn btn-primary btn-block">댓글 작성</button>
-    </form>
-    <br/>
+    {% include 'include/post.html' %}
 {% endblock %}
