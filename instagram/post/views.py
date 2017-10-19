@@ -1,4 +1,3 @@
-from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
 from .forms import PostForm, PostCommentForm
@@ -6,6 +5,7 @@ from .models import Post, PostComment
 
 
 def post_list(request):
+    # posts = Post.objects.all().exclude(author__isnull=True)
     posts = Post.objects.all()
     context = {
         "posts": posts,
@@ -35,6 +35,7 @@ def post_create(request):
 
 
 def post_detail(request, post_pk):
+    # post = get_object_or_404(Post.objects.exclude(author__isnull=True), pk=post_pk)
     post = get_object_or_404(Post, pk=post_pk)
     comment_form = PostCommentForm
     context = {
@@ -57,9 +58,9 @@ def comment_create(request, post_pk):
         form = PostCommentForm(request.POST)
         if form.is_valid():
             PostComment.objects.create(post=post, content=form.cleaned_data["content"])
-            next = request.GET.get('next')
-            if next:
-                return redirect(next)
+            page_next = request.GET.get('next')
+            if page_next:
+                return redirect(page_next)
         return redirect("post:post_detail", post_pk=post.pk)
     return redirect("post:post_list")
 

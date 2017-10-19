@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from member import views
+from . import views
 
 urlpatterns = [
     url(r'^signup/$', views.signup, name='signup'),
