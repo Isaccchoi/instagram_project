@@ -28,7 +28,12 @@
         </ul>
     {% endif %}
     <!-- 댓글 작성 -->
-    <form action="{% url 'post:comment_create' post_pk=post.pk %}?next=/post/#post-comments-{{ post.pk }}"
+    <form action="{% url 'post:comment_create' post_pk=post.pk %}?next=
+        {% if post_type == 'list' %}
+            /post/#post-{{ post.pk }}
+        {% elif post_type == 'detail' %}
+            {% url 'post:post_detail' post_pk=post.pk %}
+        {% endif %}"
           method="post">
         {% csrf_token %}
         {{ comment_form }}

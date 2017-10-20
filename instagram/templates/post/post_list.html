@@ -3,6 +3,6 @@
 {% block content %}
     <a href="{% url 'post:post_list' %}" style="text-decoration: none; color: black"><h1>Post List</h1></a>
     {% for post in posts %}
-        {% include 'include/post.html' %}
+        {% include 'include/post.html' with post_type='list' %}
     {% endfor %}
 {% endblock %}

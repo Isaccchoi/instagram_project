@@ -1,8 +1,13 @@
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect, get_object_or_404
 
 from .forms import PostForm, PostCommentForm
 from .models import Post, PostComment
+
+
+def index(request):
+    return redirect('post:post_list')
 
 
 def post_list(request):
@@ -54,10 +59,10 @@ def post_detail(request, post_pk):
 
 @login_required(login_url='member:login')
 def post_delete(request, post_pk):
-    post = Post.objects.get(pk=post_pk)
-    if post.author_id != request.user:
-        return redirect('post:post_list')
     if request.method == "POST":
+        post = get_object_or_404(Post, pk=post_pk)
+        if post.author != request.user:
+            raise PermissionDenied
         post.delete()
     return redirect("post:post_list")
 
@@ -75,7 +80,7 @@ def comment_create(request, post_pk):
                 content=form.cleaned_data["content"],
                 author=request.user,
             )
-            page_next = request.GET.get('next')
+            page_next = request.GET.get('next', '').strip()
             if page_next:
                 return redirect(page_next)
         return redirect("post:post_detail", post_pk=post.pk)
@@ -86,8 +91,8 @@ def comment_create(request, post_pk):
 def comment_delete(request, comment_pk):
     comment = get_object_or_404(PostComment, pk=comment_pk)
     post = get_object_or_404(Post, pk=comment.post_id)
-    if post.author_id != request.user.id:
-        return redirect('post:post_list')
+    if post.author != request.user:
+        raise PermissionDenied
     if request.method == "POST":
         comment.delete()
         return redirect("post:post_detail", post_pk=post.pk)
