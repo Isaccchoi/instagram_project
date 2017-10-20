@@ -6,10 +6,6 @@ from .forms import PostForm, PostCommentForm
 from .models import Post, PostComment
 
 
-def index(request):
-    return redirect('post:post_list')
-
-
 def post_list(request):
     # posts = Post.objects.all().exclude(author__isnull=True)
     posts = Post.objects.all()

@@ -20,11 +20,11 @@ from django.contrib import admin
 
 from member import urls as member_urls
 from post import urls as post_urls
-from post import views as post_views
+from . import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', post_views.index, name='index'),
+    url(r'^$', views.index, name='index'),
     url(r'^post/', include(post_urls, namespace='post')),
     url(r'^member/', include(member_urls, namespace='member')),
 ]
