@@ -2,9 +2,9 @@
     <p class="pull-right">작성자: {{ post.author.username }}</p>
     <!-- 이미지 -->
     {% if post.photo %}
-    <a href="{% url 'post:post_detail' post_pk=post.pk %}">
-        <img id="img_{{ post.pk }}" src="{{ post.photo.url }}" alt="" class="img-responsive"/>
-    </a>
+        <a href="{% url 'post:post_detail' post_pk=post.pk %}">
+            <img id="img_{{ post.pk }}" src="{{ post.photo.url }}" alt="" class="img-responsive"/>
+        </a>
     {% endif %}
     <!-- 사진 삭제 -->
     <form action="{% url 'post:post_delete' post_pk=post.pk %}" method="post">
@@ -24,10 +24,10 @@
                         {% elif post_type == 'detail' %}
                             {% url 'post:post_detail' post_pk=post.pk %}
                         {% endif %}"
-                        " method="post"
-                          style="display: inline-block;">
-                        {% csrf_token %}
-                        <button class="btn btn-warning btn-xs">댓글 삭제</button>
+                        method="post"
+                    style="display: inline-block;">
+                    {% csrf_token %}
+                    <button class="btn btn-warning btn-xs">댓글 삭제</button>
                     </form>
                 </li>
             {% endfor %}

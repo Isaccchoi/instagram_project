@@ -70,12 +70,11 @@ def comment_create(request, post_pk):
         post = get_object_or_404(Post, pk=post_pk)
         form = PostCommentForm(request.POST)
         if form.is_valid():
-            PostComment.objects.create(
-                post=post,
-                content=form.cleaned_data["content"],
-                author=request.user,
-            )
-            page_next = request.GET.get('next', '').strip()
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.author = request.user
+            comment.save()
+            page_next = request.GET.get('next').strip()
             if page_next:
                 return redirect(page_next)
         return redirect("post:post_detail", post_pk=post.pk)

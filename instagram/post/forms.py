@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Post
+from .models import Post, PostComment
 
 
 class PostForm(forms.ModelForm):
@@ -11,6 +11,13 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ('photo',)
+        widgets = {
+            'photo': forms.FileInput(
+                attrs={
+                    'class': 'form-control',
+                }
+            )
+        }
 
     def save(self, commit=True, *args, **kwargs):
         if not self.instance.pk and commit:
@@ -21,11 +28,14 @@ class PostForm(forms.ModelForm):
         return super().save(*args, **kwargs)
 
 
-class PostCommentForm(forms.Form):
-    content = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                'class': 'form-control',
-            }
-        ),
-    )
+class PostCommentForm(forms.ModelForm):
+    class Meta:
+        model = PostComment
+        fields = ('content',)
+        widgets = {
+            'content': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                }
+            )
+        }
