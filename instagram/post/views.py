@@ -25,11 +25,10 @@ def post_create(request):
         form = PostForm(request.POST, request.FILES)
         # form이 valid한지 검사
         if form.is_valid():
-            post = Post.objects.create(
-                photo=form.cleaned_data['photo'],
-                author=request.user,
-            )
-            return redirect('post:post_detail', post_pk=post.pk)
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            return redirect('post:post_list')
     else:
         # GET요청의 경우 PostForm인스턴스를 생성해서 템플릿에 전달
         form = PostForm
@@ -85,11 +84,13 @@ def comment_create(request, post_pk):
 
 @login_required(login_url='member:login')
 def comment_delete(request, comment_pk):
-    comment = get_object_or_404(PostComment, pk=comment_pk)
-    post = get_object_or_404(Post, pk=comment.post_id)
-    if post.author != request.user:
-        raise PermissionDenied
-    if request.method == "POST":
-        comment.delete()
-        return redirect("post:post_detail", post_pk=post.pk)
-    return redirect("post:post_list")
+    next_page = request.GET.get('next', '').strip()
+    if request.method == 'POST':
+        comment = get_object_or_404(PostComment, pk=comment_pk)
+        if comment.author == request.user:
+            comment.delete()
+            if next_page:
+                return redirect(next_page)
+            return redirect('post:post_detail', post_pk=comment.post.pk)
+        else:
+            raise PermissionDenied('작성자가 아닙니다')
