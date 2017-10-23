@@ -36,6 +36,7 @@ with open(os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')) as f:
 config_secret_common = json.loads(config_secret_common_str)
 
 AUTH_USER_MODEL = 'member.User'
+LOGIN_URL = 'member:login'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/

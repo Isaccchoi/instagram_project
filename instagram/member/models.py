@@ -14,6 +14,14 @@ class User(AbstractUser):
         blank=True)
     age = models.IntegerField('나이')
     like_posts = models.ManyToManyField('post.Post', verbose_name='좋아요 누른 포스트')
+    # 내가 팔로우 하고 있는 목록
+    following_users = models.ManyToManyField(
+        'self',
+        through='Relation',
+        through_fields=('from_user', 'to_user'),
+        symmetrical=False,
+        related_name='followers',
+    )
 
     objects = UserManager()
 
@@ -21,5 +29,11 @@ class User(AbstractUser):
         verbose_name = '사용자'
         verbose_name_plural = f'{verbose_name} 목록'
 
-    def like_post(self, post):
-        self.like_posts.add(post)
+
+class Relation(models.Model):
+    from_user = models.ForeignKey(User, related_name='following_users_relations', on_delete=models.CASCADE)
+    to_user = models.ForeignKey(User, related_name='follower_relations', on_delete=models.CASCADE)
+    created_at = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Relation (from: {self.from_user.username}, (to: {self.to_user.username})'

@@ -1,4 +1,6 @@
 from django.contrib.auth import get_user_model, logout as django_logout, login as django_login
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from .forms import SignupForm, LoginForm
@@ -22,11 +24,12 @@ def signup(request):
 
 
 def login(request):
+    next_page = request.GET.get('next')
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
             form.login(request)
-            return redirect('post:post_list')
+            return redirect(next_page)
     else:
         form = LoginForm
     context = {
@@ -38,3 +41,8 @@ def login(request):
 def logout(request):
     django_logout(request)
     return redirect('post:post_list')
+
+
+@login_required
+def profile(request):
+    return HttpResponse(f'{request.user.user_name} profile')

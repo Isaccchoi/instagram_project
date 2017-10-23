@@ -12,6 +12,24 @@
         <button class="btn btn-danger btn-xs" style="margin-top: 10px;">사진 삭제</button>
     </form>
     <br/>
+    <!-- 좋아요 -->
+        {% if request.user.is_authenticated %}
+            <form action="{% url 'post:post_like_toggle' post_pk=post.pk %}?next=
+                {% if post_type == 'list' %}
+                    {% url 'post:post_list' %}#post-{{ post.pk }}
+                {% elif post_type == 'detail' %}
+                    {% url 'post:post_detail' post_pk=post.pk %}
+                {% endif %}" method="post">
+
+                    {% csrf_token %}
+
+                    {% if post in request.user.like_posts.all %}
+                        <button type="submit"><span class="glyphicon glyphicon-heart"></span></button>
+                    {% else %}
+                        <button type="submit"><span class="glyphicon glyphicon-heart-empty"></span></button>
+                    {% endif %}
+            </form>
+        {% endif %}
     <!-- 댓글 출력 -->
     {% if post.comments.count %}
         <ul class="center-block" id="post-comments-{{ post.pk }}">
@@ -24,10 +42,10 @@
                         {% elif post_type == 'detail' %}
                             {% url 'post:post_detail' post_pk=post.pk %}
                         {% endif %}"
-                        method="post"
-                    style="display: inline-block;">
-                    {% csrf_token %}
-                    <button class="btn btn-warning btn-xs">댓글 삭제</button>
+                          method="post"
+                          style="display: inline-block;">
+                        {% csrf_token %}
+                        <button class="btn btn-warning btn-xs">댓글 삭제</button>
                     </form>
                 </li>
             {% endfor %}
