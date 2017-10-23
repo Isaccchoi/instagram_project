@@ -93,3 +93,17 @@ def comment_delete(request, comment_pk):
             return redirect('post:post_detail', post_pk=comment.post.pk)
         else:
             raise PermissionDenied('작성자가 아닙니다')
+
+
+def post_like_toggle(request, post_pk):
+    next_page = request.GET.get('next', '').strip()
+    user = request.user
+    post = get_object_or_404(Post, post_pk)
+    filtered_list_posts = request.user.like_posts.filter(pk=post.pk)
+    if filtered_list_posts.exists():
+        user.like_posts.remove(filtered_list_posts)
+    else:
+        user.like_posts.add(post)
+    if next_page:
+        return redirect(next_page)
+    return redirect('post:post_detail', post_pk=post_pk)
