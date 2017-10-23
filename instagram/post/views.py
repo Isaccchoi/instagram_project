@@ -1,7 +1,7 @@
-from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect, get_object_or_404
 
+from member.decorators import login_required
 from .forms import PostForm, PostCommentForm
 from .models import Post, PostComment
 
@@ -16,7 +16,7 @@ def post_list(request):
     return render(request, 'post/post_list.html', context)
 
 
-@login_required(login_url='member:login')
+@login_required
 def post_create(request):
     # if not request.user.is_authenticated:
     #     return redirect('member:login')
@@ -52,7 +52,7 @@ def post_detail(request, post_pk):
     return render(request, 'post/post_detail.html', context)
 
 
-@login_required(login_url='member:login')
+@login_required
 def post_delete(request, post_pk):
     if request.method == "POST":
         post = get_object_or_404(Post, pk=post_pk)
@@ -62,7 +62,7 @@ def post_delete(request, post_pk):
     return redirect("post:post_list")
 
 
-@login_required(login_url='member:login')
+@login_required
 def comment_create(request, post_pk):
     # if not request.user.is_authenticated:
     #     return redirect('member:login')
@@ -81,7 +81,7 @@ def comment_create(request, post_pk):
     return redirect("post:post_list")
 
 
-@login_required(login_url='member:login')
+@login_required
 def comment_delete(request, comment_pk):
     next_page = request.GET.get('next', '').strip()
     if request.method == 'POST':
@@ -95,15 +95,17 @@ def comment_delete(request, comment_pk):
             raise PermissionDenied('작성자가 아닙니다')
 
 
+@login_required
 def post_like_toggle(request, post_pk):
-    next_page = request.GET.get('next', '').strip()
-    user = request.user
-    post = get_object_or_404(Post, post_pk)
-    filtered_list_posts = request.user.like_posts.filter(pk=post.pk)
-    if filtered_list_posts.exists():
-        user.like_posts.remove(filtered_list_posts)
-    else:
-        user.like_posts.add(post)
-    if next_page:
-        return redirect(next_page)
+    if request.method == "POST":
+        next_page = request.GET.get('next', '').strip()
+        user = request.user
+        post = get_object_or_404(Post, pk=post_pk)
+        filtered_list_posts = request.user.like_posts.filter(pk=post.pk)
+        if filtered_list_posts.exists():
+            user.like_posts.remove(post)
+        else:
+            user.like_posts.add(post)
+        if next_page:
+            return redirect(next_page)
     return redirect('post:post_detail', post_pk=post_pk)
