@@ -29,6 +29,21 @@ class User(AbstractUser):
         verbose_name = '사용자'
         verbose_name_plural = f'{verbose_name} 목록'
 
+    def follow_toggle(self, user):
+        if not isinstance(user, User):
+            raise ValueError('"user" argument must be User instance!')
+
+        relation, relation_created = self.following_users_relations.get_or_create(to_user=user)
+        if relation_created:
+            return True
+        relation.delete()
+        return True
+        # if user in self.following_users.all():
+        #     Relation.objects.filter(from_user=self, to_user=user).delete()
+        # else:
+        #     self.following_users_relations.create(to_user=user)
+        #     Relation.objects.create(from_user=self, to_user=user)
+
 
 class Relation(models.Model):
     from_user = models.ForeignKey(User, related_name='following_users_relations', on_delete=models.CASCADE)
