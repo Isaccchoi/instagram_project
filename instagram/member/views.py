@@ -1,4 +1,3 @@
-from pprint import pprint
 from typing import NamedTuple
 
 import requests
@@ -41,6 +40,7 @@ def login(request):
     context = {
         'form': form,
         'facebook_app_id': settings.FACEBOOK_APP_ID,
+        'facebook_app_scope': settings.FACEBOOK_APP_SCOPE,
     }
     return render(request, 'member/login.html', context)
 
@@ -61,9 +61,8 @@ def facebook_login(request):
         token_type: str
         expires_in: str
 
-
     class DebugTokenInfo(NamedTuple):
-        app_id = str
+        app_id: str
         application: str
         expires_at: int
         is_valid: bool
@@ -93,14 +92,24 @@ def facebook_login(request):
         response = requests.get(url_access_token, params_access_token)
         return AccessTokenInfo(**response.json())
 
-    url_access_token_check = 'https://graph.facebook.com/debug_token'
+    def get_debug_token_info(token):
+        url_debug_token = 'https://graph.facebook.com/debug_token'
+        params_debug_token = {
+            'input_token': token,
+            'access_token': app_access_token,
+        }
+        response = requests.get(url_debug_token, params_debug_token)
+        return DebugTokenInfo(**response.json()['data'])
+
     access_token_info = get_access_token_info(code)
-    input_token = access_token_info.access_token
-    params_access_token_check = {
-        'input_token': input_token,
-        'access_token': app_access_token,
+    access_token = access_token_info.access_token
+    debug_token_info = get_debug_token_info(access_token)
+
+    params_url_user_info = {
+        'fields': 'id,name,picture,email',
+        'access_token': access_token,
     }
-    response = requests.get(url_access_token_check, params_access_token_check)
+    url_user_info = 'https://graph.facebook.com/me'
+    response = requests.get(url_user_info, params_url_user_info)
     result = response.json()
-    pprint(result)
     return HttpResponse(result.items())
