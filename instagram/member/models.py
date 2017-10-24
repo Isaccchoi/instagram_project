@@ -8,6 +8,13 @@ class UserManager(DjangoUserManager):
 
 
 class User(AbstractUser):
+    USER_TYPE_FACEBOOK = 'F'
+    USER_TYPE_DJANGO = 'D'
+    signup_choices = (
+        (USER_TYPE_FACEBOOK, 'Facebook'),
+        (USER_TYPE_DJANGO, 'Django'),
+    )
+    user_type = models.CharField(max_length=1, choices=signup_choices)
     img_profile = models.ImageField(
         '프로필 이미지',
         upload_to='user',
@@ -22,7 +29,6 @@ class User(AbstractUser):
         symmetrical=False,
         related_name='followers',
     )
-
     objects = UserManager()
 
     class Meta:
