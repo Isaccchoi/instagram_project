@@ -1,4 +1,5 @@
 from pprint import pprint
+from typing import NamedTuple
 
 import requests
 from django.contrib.auth import get_user_model, logout as django_logout, login as django_login
@@ -55,34 +56,51 @@ def profile(request):
 
 
 def facebook_login(request):
+    class AccessTokenInfo(NamedTuple):
+        access_token: str
+        token_type: str
+        expires_in: str
+
+
+    class DebugTokenInfo(NamedTuple):
+        app_id = str
+        application: str
+        expires_at: int
+        is_valid: bool
+        issued_at: int
+        scopes: list
+        type: str
+        user_id: str
+
     app_id = settings.FACEBOOK_APP_ID
     app_secret_code = settings.FACEBOOK_APP_SECRET_CODE
+    app_access_token = f'{app_id}|{app_secret_code}'
     code = request.GET.get('code')
-    redirect_uri = '{scheme}://{host}{relative_url}'.format(
-        scheme=request.scheme,
-        host=request.META['HTTP_HOST'],
-        relative_url=reverse('member:facebook_login'),
-    )
-    print('redirect_uri:', redirect_uri)
-    url_access_token = 'https://graph.facebook.com/v2.10/oauth/access_token'
-    params_access_token = {
-        'client_id': app_id,
-        'redirect_uri': redirect_uri,
-        'client_secret': app_secret_code,
-        'code': code,
+
+    def get_access_token_info(code):
+        redirect_uri = '{scheme}://{host}{relative_url}'.format(
+            scheme=request.scheme,
+            host=request.META['HTTP_HOST'],
+            relative_url=reverse('member:facebook_login'),
+        )
+        url_access_token = 'https://graph.facebook.com/v2.10/oauth/access_token'
+        params_access_token = {
+            'client_id': app_id,
+            'redirect_uri': redirect_uri,
+            'client_secret': app_secret_code,
+            'code': code,
+        }
+        response = requests.get(url_access_token, params_access_token)
+        return AccessTokenInfo(**response.json())
+
+    url_access_token_check = 'https://graph.facebook.com/debug_token'
+    access_token_info = get_access_token_info(code)
+    input_token = access_token_info.access_token
+    params_access_token_check = {
+        'input_token': input_token,
+        'access_token': app_access_token,
     }
-    response = requests.get(url_access_token, params_access_token)
+    response = requests.get(url_access_token_check, params_access_token_check)
     result = response.json()
     pprint(result)
-    return HttpResponse(result)
-
-    # if request.GET.get('code'):
-
-    #     redirect_uri = "http://localhost:8000/" + reverse('member:facebook_login')
-    #     print(redirect_uri)
-
-    #     code_parameter = request.GET.get('code')
-    #     r = requests.get(f"https://graph.facebook.com/v2.10/oauth/access_token?client_id={app_id}"
-    #                      f"&redirect_uri={redirect_uri}"
-    #                      f"&client_secret={app_secret}"
-    #                      f"&code={code_parameter}")
+    return HttpResponse(result.items())
