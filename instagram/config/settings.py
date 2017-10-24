@@ -44,6 +44,11 @@ LOGIN_URL = 'member:login'
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config_secret_common["django"]["secret_key"]
 
+## FACEBOOK
+
+FACEBOOK_APP_ID = config_secret_common['facebook']['app_id']
+FACEBOOK_APP_SECRET_CODE = config_secret_common['facebook']['secret_code']
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
