@@ -36,6 +36,11 @@ class SignupForm(UserCreationForm):
             ),
         }
 
+    def is_valid(self):
+        if self.data['username'][:3] == "fb_":
+            raise forms.ValidationError("fb_로 시작하는 계정은 생성이 불가능합니다")
+        super().is_valid()
+
 
 class LoginForm(forms.Form):
     """
