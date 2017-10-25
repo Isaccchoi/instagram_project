@@ -77,8 +77,6 @@ def facebook_login(request):
             self.email = data.get('email', '')
             self.url_picture = data['picture']['data']['url']
 
-
-
     app_id = settings.FACEBOOK_APP_ID
     app_secret_code = settings.FACEBOOK_APP_SECRET_CODE
     app_access_token = f'{app_id}|{app_secret_code}'

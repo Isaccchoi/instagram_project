@@ -29,6 +29,8 @@ class User(AbstractUser):
         symmetrical=False,
         related_name='followers',
     )
+    nickname = models.CharField(max_length=10, null=True, blank=True)
+
     objects = UserManager()
 
     class Meta:
