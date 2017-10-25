@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ user.username }}의 프로필
+{% endblock %}
+
+{% block content %}
+<p>
+    {% if request.user != user %}
+        <form action="{% url 'member:follow' %}" method="post">
+            {% csrf_token %}
+            <input name="to_user" type="hidden" value="{{ user.pk }}">
+            <button class="pull-right btn btn-sm
+                {% if request.user in my_follower %}
+                     btn-danger">언팔로우 하기
+                {% else %}
+                    btn-primary">팔로우 하기
+                {% endif %}
+            </button>
+        </form>
+    {% endif %}
+</p>
+
+<ul>
+    <li>username = {{ user.username }}</li>
+    {% if user.nickname %}
+        <li>nickname = {{ user.nickname }}</li>
+    {% endif %}
+    <li>age = {{ user.age }}</li>
+    <li>My follower = {{ user.follower_relations.all.count }}
+        <ul>
+            {% for follower in user.follower_relations.all %}
+                <li>{{ follower.from_user.username }}</li>
+            {% endfor %}
+        </ul>
+    </li>
+    <li>My following = {{ user.following_users_relations.all.count }}
+        <ul>
+            {% for follwing in user.following_users_relations.all %}
+                <li>{{ follwing.to_user.username }}</li>
+            {% endfor %}
+        </ul>
+    </li>
+</ul>
+{% endblock %}

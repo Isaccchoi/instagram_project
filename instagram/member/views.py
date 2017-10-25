@@ -3,12 +3,12 @@ from typing import NamedTuple
 import requests
 from django.contrib.auth import get_user_model, logout as django_logout, login as django_login
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
 from config import settings
 from .forms import SignupForm, LoginForm
+from .models import Relation
 
 User = get_user_model()
 
@@ -34,7 +34,9 @@ def login(request):
         form = LoginForm(request.POST)
         if form.is_valid():
             form.login(request)
-            return redirect(next_page)
+            if next_page:
+                return redirect(next_page)
+            return redirect('post:post_list')
     else:
         form = LoginForm
     context = {
@@ -50,9 +52,14 @@ def logout(request):
     return redirect('post:post_list')
 
 
-@login_required
-def profile(request):
-    return HttpResponse(f'{request.user.user_name} profile')
+def profile(request, user_pk):
+    user = get_object_or_404(User, pk=user_pk)
+    my_follower = User.objects.filter(following_users=user)
+    context = {
+        'user': user,
+        'my_follower': my_follower,
+    }
+    return render(request, 'member/profile.html', context)
 
 
 def facebook_login(request):
@@ -131,3 +138,15 @@ def facebook_login(request):
         )
     django_login(request, user)
     return redirect('post:post_list')
+
+
+@login_required
+def follow_or_unfollow(request):
+    if request.method != 'POST':
+        return redirect('post:post_list')
+    to_user = get_object_or_404(User, pk=request.POST.get('to_user'))
+    from_user = request.user
+    relation, created = Relation.objects.get_or_create(to_user=to_user, from_user=from_user)
+    if not created:
+        relation.delete()
+    return redirect('member:profile', user_pk=to_user.pk)

@@ -53,6 +53,7 @@ class User(AbstractUser):
         #     Relation.objects.create(from_user=self, to_user=user)
 
 
+
 class Relation(models.Model):
     from_user = models.ForeignKey(User, related_name='following_users_relations', on_delete=models.CASCADE)
     to_user = models.ForeignKey(User, related_name='follower_relations', on_delete=models.CASCADE)
