@@ -150,3 +150,4 @@ def follow_or_unfollow(request):
     if not created:
         relation.delete()
     return redirect('member:profile', user_pk=to_user.pk)
+

@@ -245,3 +245,4 @@ venv.bak/
 # Custom
 .idea/
 .config_secret/
+/.config/
