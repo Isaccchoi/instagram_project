@@ -14,48 +14,40 @@ import json
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # instagram_project/
 ROOT_DIR = os.path.dirname(BASE_DIR)
-# instagram_project/.config_secret/
-CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
 
-# instagram_project/instagram/media
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# CONFIG
+CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
+CONFIG_SECRET_COMMON_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')
+CONFIG_SECRET_DEV_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_dev.json')
+CONFIG_SECRET_DEPLOY_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_deploy.json')
+
+config_secret_common = json.loads(open(CONFIG_SECRET_COMMON_FILE).read())
+
+# media
+MEDIA_ROOT = os.path.join(BASE_DIR, '.media')
 MEDIA_URL = '/media/'
-# instagram_project/instagram/static
+
+# static
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 STATICFILES_DIRS = [
     STATIC_DIR,
 ]
+STATIC_URL = '/static/'
 
-with open(os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')) as f:
-    config_secret_common_str = f.read()
-
-config_secret_common = json.loads(config_secret_common_str)
-
-AUTH_USER_MODEL = 'member.User'
-LOGIN_URL = 'member:login'
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config_secret_common["django"]["secret_key"]
-
-## FACEBOOK
-
+# FACEBOOK
 FACEBOOK_APP_ID = config_secret_common['facebook']['app_id']
 FACEBOOK_APP_SECRET_CODE = config_secret_common['facebook']['secret_code']
 FACEBOOK_APP_SCOPE = ['user_friends', 'public_profile', 'email']
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+AUTH_USER_MODEL = 'member.User'
+LOGIN_URL = 'member:login'
 
-ALLOWED_HOSTS = [
-    ".ap-northeast-2.compute.amazonaws.com",
-]
+# SECURITY WARNING: keep the secret key used in production secret!
+
 
 # Application definition
 
@@ -68,6 +60,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 3rd party
     'django_extensions',
+    'storages',
     # custom
     'post',
     'member',
@@ -103,11 +96,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-
-DATABASES = config_secret_common["django"]["databases"]
-
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
@@ -139,7 +127,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+DEBUG = True
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-
-STATIC_URL = '/static/'
