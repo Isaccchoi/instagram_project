@@ -12,11 +12,13 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import json
 import os
+import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # instagram_project/
 ROOT_DIR = os.path.dirname(BASE_DIR)
+
 # instagram_project/.config_secret/
 CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
 
@@ -34,6 +36,19 @@ with open(os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')) as f:
     config_secret_common_str = f.read()
 
 config_secret_common = json.loads(config_secret_common_str)
+# AWS
+AWS_ACCESS_KEY_ID = config_secret_common['aws']['AWS_ACCESS_KEY_ID']
+AWS_SECRET_ACCESS_KEY = config_secret_common['aws']['AWS_SECRET_ACCESS_KEY']
+AWS_STORAGE_BUCKET_NAME = config_secret_common['aws']['S3_BUCKET_NAME']
+AWS_S3_SIGNATURE_VERSION = 's3v4'
+AWS_S3_REGION_NAME = 'ap-northeast-2'
+
+# S3 FileStorage
+DEFAULT_FILE_STORAGE = 'config.storages.MediaStorage'
+STATICFILES_STORAGE = 'config.storages.StaticStorage'
+
+STATICFILES_LOCATION = 'static'
+MEDIAFILES_LOCATION = 'media'
 
 AUTH_USER_MODEL = 'member.User'
 LOGIN_URL = 'member:login'
@@ -44,8 +59,7 @@ LOGIN_URL = 'member:login'
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config_secret_common["django"]["secret_key"]
 
-## FACEBOOK
-
+# FACEBOOK
 FACEBOOK_APP_ID = config_secret_common['facebook']['app_id']
 FACEBOOK_APP_SECRET_CODE = config_secret_common['facebook']['secret_code']
 FACEBOOK_APP_SCOPE = ['user_friends', 'public_profile', 'email']
@@ -55,6 +69,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     ".ap-northeast-2.compute.amazonaws.com",
+    'localhost',
 ]
 
 # Application definition
@@ -68,6 +83,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 3rd party
     'django_extensions',
+    'storages',
     # custom
     'post',
     'member',
