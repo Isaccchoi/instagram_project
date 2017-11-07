@@ -36,19 +36,19 @@ with open(os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')) as f:
     config_secret_common_str = f.read()
 
 config_secret_common = json.loads(config_secret_common_str)
-# AWS
-AWS_ACCESS_KEY_ID = config_secret_common['aws']['AWS_ACCESS_KEY_ID']
-AWS_SECRET_ACCESS_KEY = config_secret_common['aws']['AWS_SECRET_ACCESS_KEY']
-AWS_STORAGE_BUCKET_NAME = config_secret_common['aws']['S3_BUCKET_NAME']
-AWS_S3_SIGNATURE_VERSION = 's3v4'
-AWS_S3_REGION_NAME = 'ap-northeast-2'
-
-# S3 FileStorage
-DEFAULT_FILE_STORAGE = 'config.storages.MediaStorage'
-STATICFILES_STORAGE = 'config.storages.StaticStorage'
-
-STATICFILES_LOCATION = 'static'
-MEDIAFILES_LOCATION = 'media'
+# # AWS
+# AWS_ACCESS_KEY_ID = config_secret_common['aws']['AWS_ACCESS_KEY_ID']
+# AWS_SECRET_ACCESS_KEY = config_secret_common['aws']['AWS_SECRET_ACCESS_KEY']
+# AWS_STORAGE_BUCKET_NAME = config_secret_common['aws']['S3_BUCKET_NAME']
+# AWS_S3_SIGNATURE_VERSION = 's3v4'
+# AWS_S3_REGION_NAME = 'ap-northeast-2'
+#
+# # S3 FileStorage
+# DEFAULT_FILE_STORAGE = 'config.storages.MediaStorage'
+# STATICFILES_STORAGE = 'config.storages.StaticStorage'
+#
+# STATICFILES_LOCATION = 'static'
+# MEDIAFILES_LOCATION = 'media'
 
 AUTH_USER_MODEL = 'member.User'
 LOGIN_URL = 'member:login'
@@ -68,7 +68,7 @@ FACEBOOK_APP_SCOPE = ['user_friends', 'public_profile', 'email']
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    ".ap-northeast-2.compute.amazonaws.com",
+    # ".ap-northeast-2.compute.amazonaws.com",
     'localhost',
 ]
 
@@ -84,6 +84,7 @@ INSTALLED_APPS = [
     # 3rd party
     'django_extensions',
     'storages',
+    'rest_framework',
     # custom
     'post',
     'member',
@@ -122,7 +123,14 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = config_secret_common["django"]["databases"]
+# DATABASES = config_secret_common["django"]["databases"]
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators

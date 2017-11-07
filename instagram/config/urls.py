@@ -20,6 +20,7 @@ from django.contrib import admin
 
 from member import urls as member_urls
 from post import urls as post_urls
+from post.apis import PostListView
 from . import views
 
 urlpatterns = [
@@ -27,6 +28,7 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^post/', include(post_urls, namespace='post')),
     url(r'^member/', include(member_urls, namespace='member')),
+    url(r'^api/post/$', PostListView.as_view(), name='api_post_list'),
 ]
 
 urlpatterns += static(

@@ -1,6 +1,7 @@
 from django.conf.urls import url
 
-from . import views
+from post import apis
+from .. import views
 
 urlpatterns = [
     url(r'^$', views.post_list, name='post_list'),
@@ -10,4 +11,5 @@ urlpatterns = [
     url(r'^(?P<post_pk>\d+)/comment/create/$', views.comment_create, name='comment_create'),
     url(r'^comment/delete/(?P<comment_pk>\d+)/$', views.comment_delete, name='comment_delete'),
     url(r'^(?P<post_pk>\d+)/like_toggle/$', views.post_like_toggle, name='post_like_toggle'),
+    url(r'api/', apis.PostListView.as_view(), name='post_api_list'),
 ]
