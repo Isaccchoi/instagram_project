@@ -72,6 +72,10 @@ ALLOWED_HOSTS = [
     'localhost',
 ]
 
+CORS_ORIGIN_WHITELIST = (
+    'localhost:3001',
+)
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -85,6 +89,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'storages',
     'rest_framework',
+    'corsheaders',
     # custom
     'post',
     'member',
@@ -92,6 +97,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
