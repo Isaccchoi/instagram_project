@@ -246,4 +246,4 @@ venv.bak/
 .idea/
 .config_secret/
 /.config/
-/instagram/post/tests/apis/bubble.jpg
+/static/bubble.jpg

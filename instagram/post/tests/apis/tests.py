@@ -1,13 +1,17 @@
+import filecmp
 import io
+import os
 from random import randint
+from tempfile import NamedTemporaryFile
 
-from PIL import Image
+import requests
 from django.contrib.auth import get_user_model
 from django.core.files import File
 from django.urls import reverse, resolve
 from rest_framework import status
 from rest_framework.test import APILiveServerTestCase
 
+from django.conf import settings
 from post.apis import PostListView
 from post.models import Post
 
@@ -89,19 +93,46 @@ class PostListViewTest(APILiveServerTestCase):
         # force_login을 이용해 생성한 user로그인
         self.client.force_login(user=user)
 
-        # dummy file 생서
-        file = io.BytesIO()
-        image = Image.new('RGBA', size=(100, 100), color=(155, 0, 0))
-        image.save(file, 'png')
-        file.name = 'test.png'
-        file.seek(0)
+        # dummy file 생성
+        # file = io.BytesIO()
+        # image = Image.new('RGBA', size=(100, 100), color=(155, 0, 0))
+        # image.save(file, 'png')
+        # file.name = 'test.png'
+        # file.seek(0)
 
-        data = {
-            'photo': file,
-        }
-        # post방식으로 url에 dummy file 전달
-        response = self.client.post(url, data, format='multipart')
-        self.assertEqual(response.status_code, 201)
+        # data = {
+        #     'photo': photo,
+        # }
+        # # post방식으로 url에 dummy file 전달
+        # response = self.client.post(url, data, format='multipart')
+
+        path = os.path.join(settings.STATIC_DIR, 'test', 'image.jpg')
+        print(path)
+        with open(path, 'rb') as photo:
+            response = self.client.post(self.URL_API_POST_LIST, {
+                'photo': photo,
+            })
+
+        # post메서드로 보내고 받은 response의 status코드가 201인지 확인
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        # photo가 response.data에 잘 들어 있는지 확인
         self.assertIn('photo', response.data)
-        self.assertIn('pk', response.data)
-        self.assertEqual(1, response.data['pk'])
+        # 처음 생성을 했으니 Post.objects.count가 1인지 확인
+        self.assertEqual(Post.objects.count(), 1)
+        # response에서 새로 만들어진 post의 pk를 사용하여 post를 가져옴
+        post = Post.objects.get(pk=response.data['pk'])
+
+        if settings.STATICFILES_STORAGE == 'django.contrib.staticfiles.storage.StaticStorage':
+            # 파일시스템에서의 두 파일을 비교할 경우
+            self.assertTrue(filecmp.cmp(path, post.photo.file.name))
+        else:
+            # S3에 올라간 파일을 비교해야하는 경우
+            url = post.photo.url
+            # requests를 사용해서 S3파일 URL에 GET요청
+            response = requests.get(url)
+            # NamedTemporaryFile객체를 temp_file이라는 파일변수로 open
+            with NamedTemporaryFile(suffix='.jpg', delete=False) as temp_file:
+                # temp_file에 response의 내용을 기록
+                temp_file.write(response.content)
+            # 기록한 temp_file과 원본 path를 비교
+            self.assertTrue(filecmp.cmp(path, temp_file.name))
