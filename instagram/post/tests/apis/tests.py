@@ -1,6 +1,7 @@
 import io
 from random import randint
 
+from PIL import Image
 from django.contrib.auth import get_user_model
 from django.core.files import File
 from django.urls import reverse, resolve
@@ -17,7 +18,6 @@ class PostListViewTest(APILiveServerTestCase):
     URL_API_POST_LIST_NAME = 'api-post'
     URL_API_POST_LIST = '/api/post/'
     VIEW_CLASS = PostListView
-
 
     @staticmethod
     def create_user(username='dummy'):
@@ -68,8 +68,8 @@ class PostListViewTest(APILiveServerTestCase):
         author가 none인경우 안나오는지 테스트
         """
         author = self.create_user()
-        num_author_none_posts = randint(0,10)
-        num_posts = randint(11,20)
+        num_author_none_posts = randint(0, 10)
+        num_posts = randint(11, 20)
         for i in range(num_author_none_posts):
             self.create_post()
         for i in range(num_posts):
@@ -77,3 +77,31 @@ class PostListViewTest(APILiveServerTestCase):
 
         response = self.client.get(self.URL_API_POST_LIST)
         self.assertEqual(len(response.data), num_posts)
+
+    def test_create_post(self):
+        """
+        Post Create가 되는지 확인
+        """
+        # PostListView를 reverse를 이용해 url을 받아옴
+        url = reverse(self.URL_API_POST_LIST_NAME)
+        # user 생성
+        user = self.create_user()
+        # force_login을 이용해 생성한 user로그인
+        self.client.force_login(user=user)
+
+        # dummy file 생서
+        file = io.BytesIO()
+        image = Image.new('RGBA', size=(100, 100), color=(155, 0, 0))
+        image.save(file, 'png')
+        file.name = 'test.png'
+        file.seek(0)
+
+        data = {
+            'photo': file,
+        }
+        # post방식으로 url에 dummy file 전달
+        response = self.client.post(url, data, format='multipart')
+        self.assertEqual(response.status_code, 201)
+        self.assertIn('photo', response.data)
+        self.assertIn('pk', response.data)
+        self.assertEqual(1, response.data['pk'])
