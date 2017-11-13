@@ -4,7 +4,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from member.serializers import UserSerializer
+from member.serializers import UserSerializer, SignupSerializer
 
 
 class Login(APIView):
@@ -25,7 +25,7 @@ class Login(APIView):
 
 class Signup(APIView):
     def post(self, request, *args, **kwargs):
-        serializer = UserSerializer(data=request.data)
+        serializer = SignupSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
