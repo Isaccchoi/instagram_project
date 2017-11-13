@@ -19,7 +19,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 
 from member import urls as member_urls
-from member.apis import Login
+from member.apis import Login, Signup
 from post import urls as post_urls
 from post.apis import PostListView
 from . import views
@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^member/', include(member_urls, namespace='member')),
     url(r'^api/post/$', PostListView.as_view(), name='api-post'),
     url(r'^api/member/login/$', Login.as_view(), name='api-login'),
+    url(r'^api/member/signup/$', Signup.as_view(), name='api-signup'),
 ]
 
 urlpatterns += static(

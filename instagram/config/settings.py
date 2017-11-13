@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import json
 import os
+
 import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -95,6 +96,13 @@ INSTALLED_APPS = [
     'post',
     'member',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
