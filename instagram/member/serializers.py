@@ -45,3 +45,11 @@ class SignupSerializer(serializers.ModelSerializer):
 
     def get_token(self, obj):
         return Token.objects.get_or_create(user=obj)[0].key
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        data = {
+            'user': ret,
+            'token': instance.token,
+        }
+        return data

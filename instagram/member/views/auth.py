@@ -1,13 +1,11 @@
 from django.conf import settings
 from django.contrib.auth import (
-    get_user_model,
     login as django_login,
-    logout as django_logout)
-from django.shortcuts import render, redirect
+    logout as django_logout,
+)
+from django.shortcuts import redirect, render
 
-from ..forms import SignupForm, LoginForm
-
-User = get_user_model()
+from ..forms import LoginForm, SignupForm
 
 __all__ = (
     'login',
