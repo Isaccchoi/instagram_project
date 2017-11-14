@@ -1,9 +1,17 @@
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect, get_object_or_404
 
-from member.decorators import login_required
-from .forms import PostForm, PostCommentForm
-from .models import Post, PostComment
+from ..forms import PostForm, PostCommentForm
+from ..models import Post, PostComment
+from ...member.decorators import login_required
+
+__all__ = (
+    'post_list',
+    'post_detail'
+    'post_create',
+    'post_delete',
+    'post_like_toggle',
+)
 
 
 def post_list(request):
@@ -94,6 +102,22 @@ def comment_delete(request, comment_pk):
             return redirect('post:post_detail', post_pk=comment.post.pk)
         else:
             raise PermissionDenied('작성자가 아닙니다')
+
+
+@login_required
+def post_like_toggle(request, post_pk):
+    if request.method == "POST":
+        next_page = request.GET.get('next', '').strip()
+        user = request.user
+        post = get_object_or_404(Post, pk=post_pk)
+        filtered_list_posts = request.user.like_posts.filter(pk=post.pk)
+        if filtered_list_posts.exists():
+            user.like_posts.remove(post)
+        else:
+            user.like_posts.add(post)
+        if next_page:
+            return redirect(next_page)
+    return redirect('post:post_detail', post_pk=post_pk)
 
 
 @login_required
