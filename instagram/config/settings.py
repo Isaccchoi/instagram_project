@@ -75,6 +75,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     # ".ap-northeast-2.compute.amazonaws.com",
     'localhost',
+    'api.isaccchoi.com',
 ]
 
 CORS_ORIGIN_WHITELIST = (
