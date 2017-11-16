@@ -23,15 +23,19 @@ ROOT_DIR = os.path.dirname(BASE_DIR)
 # instagram_project/.config_secret/
 CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
 
-# instagram_project/instagram/media
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# instagram_project/instagram/.media/
+MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
 MEDIA_URL = '/media/'
+
 # instagram_project/instagram/static
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [STATIC_DIR, ]
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(ROOT_DIR, 'static')
+
+
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
-STATICFILES_DIRS = [
-    STATIC_DIR,
-]
+
 
 with open(os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')) as f:
     config_secret_common_str = f.read()
@@ -185,4 +189,3 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = '/static/'
