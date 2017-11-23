@@ -80,7 +80,7 @@ class PostListViewTest(APILiveServerTestCase):
             self.create_post(author=author)
 
         response = self.client.get(self.URL_API_POST_LIST)
-        self.assertEqual(len(response.data['results']), 3)
+        self.assertEqual(response.data['count'], num_posts)
 
     def test_create_post(self):
         """
