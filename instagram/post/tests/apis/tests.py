@@ -57,11 +57,11 @@ class PostListViewTest(APILiveServerTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # Post.objects.count가 랜덤으로 생성으로 한 갯수인 num과 같은지 확인
         self.assertEqual(Post.objects.count(), num)
-        # response된 데이터의 갯수가 num과 같은지 확인
-        self.assertEqual(len(response.data), num)
+        # response로 돌아온 JSON 객체의 'count'가 num과 같은지 확인
+        self.assertEqual(response.data['count'], num)
         # 만들어진 post 안에 pk, author, photo, created_date 키값이 있는지 확인
-        for i in range(num):
-            cur_post_data = response.data[i]
+        for i in range(len(response.data['results'])):
+            cur_post_data = response.data['results'][i]
             self.assertIn('pk', cur_post_data)
             self.assertIn('author', cur_post_data)
             self.assertIn('photo', cur_post_data)
