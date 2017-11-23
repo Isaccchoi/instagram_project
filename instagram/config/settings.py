@@ -48,8 +48,10 @@ config_secret_common = json.loads(config_secret_common_str)
 # DEFAULT_FILE_STORAGE = 'config.storages.MediaStorage'
 # STATICFILES_STORAGE = 'config.storages.StaticStorage'
 #
-# STATICFILES_LOCATION = 'static'
+# STATICFILES_LOCATION = 'static'F
 # MEDIAFILES_LOCATION = 'media'
+
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticStorage'
 
 AUTH_USER_MODEL = 'member.User'
 LOGIN_URL = 'member:login'

@@ -38,7 +38,7 @@ class PostListViewTest(APILiveServerTestCase):
     def test_post_list_url_resolve_view_class(self):
         resolver_match = resolve(self.URL_API_POST_LIST)
         self.assertEqual(
-            resolver_match.url_name,
+            resolver_match.view_name,
             self.URL_API_POST_LIST_NAME)
         self.assertEqual(
             resolver_match.func.view_class,
@@ -80,7 +80,7 @@ class PostListViewTest(APILiveServerTestCase):
             self.create_post(author=author)
 
         response = self.client.get(self.URL_API_POST_LIST)
-        self.assertEqual(len(response.data), num_posts)
+        self.assertEqual(len(response.data['results']), 3)
 
     def test_create_post(self):
         """
@@ -90,6 +90,7 @@ class PostListViewTest(APILiveServerTestCase):
         url = reverse(self.URL_API_POST_LIST_NAME)
         # user 생성
         user = self.create_user()
+        self.client.force_authenticate(user=user)
         # force_login을 이용해 생성한 user로그인
         self.client.force_login(user=user)
 
@@ -112,7 +113,6 @@ class PostListViewTest(APILiveServerTestCase):
             response = self.client.post(self.URL_API_POST_LIST, {
                 'photo': photo,
             })
-
         # post메서드로 보내고 받은 response의 status코드가 201인지 확인
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # photo가 response.data에 잘 들어 있는지 확인
