@@ -247,3 +247,4 @@ venv.bak/
 .config_secret/
 /.config/
 /static/bubble.jpg
+secret.tar
