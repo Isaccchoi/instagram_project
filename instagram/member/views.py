@@ -1,4 +1,3 @@
-import json
 from typing import NamedTuple
 
 import requests
@@ -104,7 +103,7 @@ def facebook_login(request):
         redirect_uri = '{scheme}://{host}{relative_url}'.format(
             scheme=request.scheme,
             host=request.META['HTTP_HOST'],
-            relative_url=reverse('member:facebook_login'),
+            relative_url=reverse('view:member:facebook_login'),
         )
         print('redirect_uri:', redirect_uri)
         # 액세스 토큰을 요청하기 위한 엔드포인트

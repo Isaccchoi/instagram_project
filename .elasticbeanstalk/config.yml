@@ -1,0 +1,18 @@
+branch-defaults:
+  deploy:
+    environment: intagram-minimum-deploy-dev
+    group_suffix: null
+global:
+  application_name: intagram_minimum_deploy
+  branch: null
+  default_ec2_keyname: EB-User2
+  default_platform: Docker 17.06.2-ce
+  default_region: ap-northeast-2
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: eb-user2
+  repository: null
+  sc: git
+  workspace_type: Application
