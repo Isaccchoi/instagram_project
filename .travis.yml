@@ -6,7 +6,7 @@ before_install:
   -in secret.tar.enc -out secret.tar -d
 - tar xvf secret.tar
 install:
-- pip install -r requirements.txt
+- pip install -r .requirements/deploy.txt
 before_script:
 - cd instagram
 script:
