@@ -107,7 +107,7 @@ class PostListViewTest(APILiveServerTestCase):
         # response = self.client.post(url, data, format='multipart')
 
         path = os.path.join(settings.STATIC_DIR, 'test', 'image.jpg')
-        print(path)
+        # print(path)
         with open(path, 'rb') as photo:
             response = self.client.post(self.URL_API_POST_LIST, {
                 'photo': photo,
