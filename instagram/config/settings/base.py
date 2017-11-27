@@ -28,7 +28,6 @@ CONFIG_SECRET_DEPLOY_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_deploy.jso
 
 config_secret_common = json.loads(open(CONFIG_SECRET_COMMON_FILE).read())
 
-
 # AUTH
 SUPERUSER_USERNAME = config_secret_common['django']['superuser']['username']
 SUPERUSER_PASSWORD = config_secret_common['django']['superuser']['password']
@@ -46,12 +45,11 @@ STATICFILES_DIRS = [
 ]
 STATIC_URL = '/static/'
 
-<<<<<<< HEAD:instagram/config/settings/base.py
 # FACEBOOK
 FACEBOOK_APP_ID = config_secret_common['facebook']['app_id']
 FACEBOOK_APP_SECRET_CODE = config_secret_common['facebook']['secret_code']
 FACEBOOK_APP_SCOPE = ['user_friends', 'public_profile', 'email']
-=======
+
 with open(os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')) as f:
     config_secret_common_str = f.read()
 
@@ -71,15 +69,12 @@ config_secret_common = json.loads(config_secret_common_str)
 # MEDIAFILES_LOCATION = 'media'
 
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticStorage'
->>>>>>> b2508cda16f730a0b54dce930c092b0e40a73d0a:instagram/config/settings.py
 
 AUTH_USER_MODEL = 'member.User'
 LOGIN_URL = 'member:login'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-<<<<<<< HEAD:instagram/config/settings/base.py
-=======
 # FACEBOOK
 FACEBOOK_APP_ID = config_secret_common['facebook']['app_id']
 FACEBOOK_APP_SECRET_CODE = config_secret_common['facebook']['secret_code']
@@ -92,7 +87,6 @@ ALLOWED_HOSTS = [
     # ".ap-northeast-2.compute.amazonaws.com",
     'localhost',
 ]
->>>>>>> b2508cda16f730a0b54dce930c092b0e40a73d0a:instagram/config/settings.py
 
 CORS_ORIGIN_WHITELIST = (
     'localhost:3001',
@@ -110,12 +104,9 @@ INSTALLED_APPS = [
     # 3rd party
     'django_extensions',
     'storages',
-<<<<<<< HEAD:instagram/config/settings/base.py
-=======
+    # Custom
     'rest_framework',
     'rest_framework.authtoken',
->>>>>>> b2508cda16f730a0b54dce930c092b0e40a73d0a:instagram/config/settings.py
-    # custom
     'post',
     'member',
 ]
@@ -163,8 +154,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-<<<<<<< HEAD:instagram/config/settings/base.py
-=======
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
@@ -177,7 +166,6 @@ DATABASES = {
     }
 }
 
->>>>>>> b2508cda16f730a0b54dce930c092b0e40a73d0a:instagram/config/settings.py
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
