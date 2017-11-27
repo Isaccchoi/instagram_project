@@ -7,7 +7,7 @@ from ... import views
 class PostListToggleViewTest(TestCase):
     TEST_POST_PK = 1
     VIEW_URL = f'/post/{TEST_POST_PK}/like_toggle/'
-    VIEW_URL_NAME = 'post:post_like_toggle'
+    VIEW_URL_NAME = 'views:post:like_toggle'
 
     def test_url_equal_reverse_url_name(self):
         """

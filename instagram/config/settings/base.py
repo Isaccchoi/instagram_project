@@ -13,12 +13,14 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import json
 import os
 
+import config
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # instagram_project/
 ROOT_DIR = os.path.dirname(BASE_DIR)
 
-# CONFIG
+# instagram_project/.config_secret/
 CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
 CONFIG_SECRET_COMMON_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')
 CONFIG_SECRET_DEV_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_dev.json')
@@ -44,16 +46,57 @@ STATICFILES_DIRS = [
 ]
 STATIC_URL = '/static/'
 
+<<<<<<< HEAD:instagram/config/settings/base.py
 # FACEBOOK
 FACEBOOK_APP_ID = config_secret_common['facebook']['app_id']
 FACEBOOK_APP_SECRET_CODE = config_secret_common['facebook']['secret_code']
 FACEBOOK_APP_SCOPE = ['user_friends', 'public_profile', 'email']
+=======
+with open(os.path.join(CONFIG_SECRET_DIR, 'settings_common.json')) as f:
+    config_secret_common_str = f.read()
+
+config_secret_common = json.loads(config_secret_common_str)
+# # AWS
+# AWS_ACCESS_KEY_ID = config_secret_common['aws']['AWS_ACCESS_KEY_ID']
+# AWS_SECRET_ACCESS_KEY = config_secret_common['aws']['AWS_SECRET_ACCESS_KEY']
+# AWS_STORAGE_BUCKET_NAME = config_secret_common['aws']['S3_BUCKET_NAME']
+# AWS_S3_SIGNATURE_VERSION = 's3v4'
+# AWS_S3_REGION_NAME = 'ap-northeast-2'
+#
+# # S3 FileStorage
+# DEFAULT_FILE_STORAGE = 'config.storages.MediaStorage'
+# STATICFILES_STORAGE = 'config.storages.StaticStorage'
+#
+# STATICFILES_LOCATION = 'static'F
+# MEDIAFILES_LOCATION = 'media'
+
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticStorage'
+>>>>>>> b2508cda16f730a0b54dce930c092b0e40a73d0a:instagram/config/settings.py
 
 AUTH_USER_MODEL = 'member.User'
 LOGIN_URL = 'member:login'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
+<<<<<<< HEAD:instagram/config/settings/base.py
+=======
+# FACEBOOK
+FACEBOOK_APP_ID = config_secret_common['facebook']['app_id']
+FACEBOOK_APP_SECRET_CODE = config_secret_common['facebook']['secret_code']
+FACEBOOK_SCOPE = ['user_friends', 'public_profile', 'email']
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
+
+ALLOWED_HOSTS = [
+    # ".ap-northeast-2.compute.amazonaws.com",
+    'localhost',
+]
+>>>>>>> b2508cda16f730a0b54dce930c092b0e40a73d0a:instagram/config/settings.py
+
+CORS_ORIGIN_WHITELIST = (
+    'localhost:3001',
+)
 
 # Application definition
 
@@ -67,13 +110,31 @@ INSTALLED_APPS = [
     # 3rd party
     'django_extensions',
     'storages',
+<<<<<<< HEAD:instagram/config/settings/base.py
+=======
+    'rest_framework',
+    'rest_framework.authtoken',
+>>>>>>> b2508cda16f730a0b54dce930c092b0e40a73d0a:instagram/config/settings.py
     # custom
     'post',
     'member',
 ]
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'member.backends.FacebookBackend'
+]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -102,6 +163,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+<<<<<<< HEAD:instagram/config/settings/base.py
+=======
+# Database
+# https://docs.djangoproject.com/en/1.11/ref/settings/#databases
+
+# DATABASES = config_secret_common["django"]["databases"]
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+
+>>>>>>> b2508cda16f730a0b54dce930c092b0e40a73d0a:instagram/config/settings.py
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
