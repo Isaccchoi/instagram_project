@@ -26,6 +26,12 @@ CONFIG_SECRET_DEPLOY_FILE = os.path.join(CONFIG_SECRET_DIR, 'settings_deploy.jso
 
 config_secret_common = json.loads(open(CONFIG_SECRET_COMMON_FILE).read())
 
+
+# AUTH
+SUPERUSER_USERNAME = config_secret_common['django']['superuser']['username']
+SUPERUSER_PASSWORD = config_secret_common['django']['superuser']['password']
+SUPERUSER_EMAIL = config_secret_common['django']['superuser']['email']
+
 # media
 MEDIA_ROOT = os.path.join(BASE_DIR, '.media')
 MEDIA_URL = '/media/'

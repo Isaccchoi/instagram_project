@@ -1,3 +1,6 @@
+import random
+import string
+
 from .base import *
 
 config_secret = json.loads(open(CONFIG_SECRET_DEV_FILE).read())
@@ -18,3 +21,8 @@ STATICFILES_STORAGE = 'config.storages.StaticStorage'
 
 # DATABASE
 DATABASES = config_secret['django']['databases']
+
+# SECURITY KEY
+SECRET_KEY = ''.join(
+    [random.choice(string.ascii_lowercase) for i in range(40)]
+)

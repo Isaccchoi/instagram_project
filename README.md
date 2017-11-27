@@ -5,7 +5,7 @@
 
 ## Secret config JSON File
 
-```.config_secret/seggins_common.json```
+```.config_secret/settings_common.json```
 
 ```json
 {
